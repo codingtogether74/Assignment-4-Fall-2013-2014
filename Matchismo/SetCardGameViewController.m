@@ -24,7 +24,10 @@
 {
     return 3;
 }
-
+- (NSString *)gameName
+{
+    return @"Set   Cards";
+}
 -(void)updateCardButton:(UIButton *)cardButton  usingCard:(Card *)card
 {
     if ([card isKindOfClass:[SetCard class]]) {

@@ -23,6 +23,11 @@
 {
     return 2;
 }
+- (NSString *)gameName
+{
+    return @"Playing Cards";
+}
+
 -(void)updateCardButton:(UIButton *)cardButton usingCard:(Card *)card
 {
     // Abstract method to add a background image representing the back of a card

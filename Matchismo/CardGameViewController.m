@@ -8,7 +8,7 @@
 
 #import "CardGameViewController.h"
 #import "HistoryViewController.h"
-
+#import "GameResult.h"
 
 @interface CardGameViewController ()
 
@@ -21,16 +21,25 @@
 @property (weak, nonatomic) IBOutlet UILabel *resultsLabel;
 
 @property (strong,nonatomic) NSMutableArray *flipsHistory;
+@property (strong, nonatomic) GameResult *gameResult;
 
 @end
 
 @implementation CardGameViewController
 
+- (GameResult *)gameResult
+{
+    if (!_gameResult) _gameResult = [[GameResult alloc] init];
+    _gameResult.gameName = [self gameName];
+    
+    return _gameResult;
+}
+
 - (CardMatchingGame *)game
 {
     if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count] usingDeck:[self createDeck]];
     _game.numberOfMatches =[self numberOfMatches];
-    
+    _game.gameName = [self gameName];
     return _game;
 }
 
@@ -53,6 +62,11 @@
 - (NSUInteger)numberOfMatches //abstract
 {
     return 0;
+}
+
+- (NSString *)gameName //abstract
+{
+    return nil;
 }
 
 -(void)updateCardButton:(UIButton *)cardButton usingCard:(Card *)card //abstract
@@ -81,6 +95,7 @@
     self.game = nil;
     self.flipCount =0;
     self.flipsHistory =nil;
+    self.gameResult = nil;
     [self updateUI];
 }
 
@@ -90,6 +105,7 @@
     int cardIndex = [self.cardButtons indexOfObject:sender];
     [self.game chooseCardAtIndex:cardIndex];
     self.flipCount++;
+    self.gameResult.score = self.game.score;
     [self updateUI];
 }
 
@@ -141,5 +157,4 @@
     } else
         self.resultsLabel.attributedText= [[NSAttributedString alloc] initWithString:@"Play game!"];
 }
-
 @end
