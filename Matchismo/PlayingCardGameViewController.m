@@ -25,13 +25,11 @@
 }
 - (NSString *)gameName
 {
-    return @"Playing Cards";
+    return @"Play Cards";
 }
 
 -(void)updateCardButton:(UIButton *)cardButton usingCard:(Card *)card
 {
-    // Abstract method to add a background image representing the back of a card
-    // and to decide if selected card is higlighted
     [cardButton setTitle:[self titleForCard:card] forState:UIControlStateNormal];
     [cardButton setBackgroundImage:[self backgroundImageForCard:card] forState:UIControlStateNormal];
 }
@@ -39,7 +37,6 @@
 - (NSAttributedString *)attributedCardsDescription:(NSArray *)cards
 {
     NSString *text = [cards componentsJoinedByString:@"&"];
-//    text = [text stringByAppendingString:@" "];
     return [[NSAttributedString alloc] initWithString:text];
 }
 

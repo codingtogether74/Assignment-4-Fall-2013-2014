@@ -26,7 +26,7 @@
 }
 - (NSString *)gameName
 {
-    return @"Set   Cards";
+    return @"Set  Cards";
 }
 -(void)updateCardButton:(UIButton *)cardButton  usingCard:(Card *)card
 {

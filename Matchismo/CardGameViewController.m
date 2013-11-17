@@ -52,13 +52,13 @@
 {
     return nil;
 }
-
+/*
 - (void)setCardButtons:(NSArray *)cardButtons
 {
     _cardButtons = cardButtons;
     [self updateUI];
 }
-
+*/
 - (NSUInteger)numberOfMatches //abstract
 {
     return 0;
@@ -86,6 +86,7 @@
 {
     return nil;
 }
+
 - (NSMutableArray *)flipsHistory
 {
     if (!_flipsHistory)_flipsHistory = [[NSMutableArray alloc] init];
@@ -110,16 +111,6 @@
 }
 
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([segue.identifier isEqualToString:@"Show history"]) {
-        if ([segue.destinationViewController isKindOfClass:[HistoryViewController class]]) {
-            HistoryViewController *hsvc = (HistoryViewController *)segue.destinationViewController;
-            hsvc.flipsHistory = self.flipsHistory;
-        }
-    }
-
-}
 - (void)updateUI
 {
     for (UIButton *cardButton in self.cardButtons) {
@@ -156,5 +147,22 @@
         [self.flipsHistory addObject:textResult];
     } else
         self.resultsLabel.attributedText= [[NSAttributedString alloc] initWithString:@"Play game!"];
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [self updateUI];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"Show history"]) {
+        if ([segue.destinationViewController isKindOfClass:[HistoryViewController class]]) {
+            HistoryViewController *hsvc = (HistoryViewController *)segue.destinationViewController;
+            hsvc.flipsHistory = self.flipsHistory;
+        }
+    }
+    
 }
 @end

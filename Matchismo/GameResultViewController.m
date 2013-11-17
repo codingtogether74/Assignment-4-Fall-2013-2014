@@ -26,35 +26,48 @@
     [formatter setDateStyle:NSDateFormatterShortStyle];
     [formatter setTimeStyle:NSDateFormatterShortStyle];
     
-    //---- search max score and min duration ----
+    //---- search max /min score and duration ----
     NSArray *resultOrdered = [[GameResult allGameResults] sortedArrayUsingSelector:@selector(compareScoreToGameResult:)];
     GameResult *resultMax =[resultOrdered firstObject];
+    GameResult *resultMin =[resultOrdered lastObject];
     int maxScore = resultMax.score;
+    int minScore = resultMin.score;
+
     resultOrdered = [[GameResult allGameResults] sortedArrayUsingSelector:@selector(compareDurationToGameResult:)];
     resultMax =[resultOrdered firstObject];
-    int minDuration = (int)roundf(resultMax.duration);
+    resultMin =[resultOrdered lastObject];
+    int minDuration = (int)roundf(resultMin.duration);
+    int maxDuration = (int)roundf(resultMax.duration);
+
     //--------------------------------------------
     
     for (GameResult *result in [[GameResult allGameResults] sortedArrayUsingSelector:self.sortSelector]) {
-        NSString *displayString = [NSString stringWithFormat:@"%@ Score: %d (%@, %0g)\n", result.gameName, result.score,
+        NSString *displayString = [NSString stringWithFormat:@"%@ Score: %4d (%@, %0g)\n", result.gameName, result.score,
                                    [formatter stringFromDate:result.end], round(result.duration)];
         NSMutableAttributedString *scoreAttributed =[[NSMutableAttributedString alloc] initWithString:displayString];
         
         //--- hightlight max score and min duration -----
+        NSRange rangeScoreNumber = NSMakeRange([displayString rangeOfString:@":"].location+1,
+                                               [displayString rangeOfString:@"("].location-[displayString rangeOfString:@":"].location-1);
+        NSRange rangeDurationNumber = NSMakeRange([displayString rangeOfString:@"," options:NSBackwardsSearch].location+1,
+                                                  [displayString rangeOfString:@")"].location-[displayString rangeOfString:@","
+                                                                                                                   options:NSBackwardsSearch].location-1);
+        
+        if (result.score == minScore) {
+            [scoreAttributed setAttributes: @{NSForegroundColorAttributeName: [UIColor greenColor]} range:rangeScoreNumber];
+        }
+        if ((int)roundf(result.duration) == maxDuration) {
+            [scoreAttributed setAttributes: @{NSForegroundColorAttributeName: [UIColor greenColor]} range:rangeDurationNumber];
+        }
+       
         if (result.score == maxScore) {
-            NSRange rangeBegin = [displayString rangeOfString:@":"];
-            NSRange rangeEnd = [displayString rangeOfString:@"("];
-            NSRange rangeScoreNumber = NSMakeRange(rangeBegin.location+1, rangeEnd.location-rangeBegin.location-1);
             [scoreAttributed setAttributes: @{NSForegroundColorAttributeName: [UIColor redColor]} range:rangeScoreNumber];
         }
         if ((int)roundf(result.duration) == minDuration) {
-            NSRange rangeBegin = [displayString rangeOfString:@"," options:NSBackwardsSearch];
-            NSRange rangeEnd = [displayString rangeOfString:@")"];
-            NSRange rangeScoreNumber = NSMakeRange(rangeBegin.location+1, rangeEnd.location-rangeBegin.location-1);
-            [scoreAttributed setAttributes: @{NSForegroundColorAttributeName: [UIColor redColor]} range:rangeScoreNumber];
+            [scoreAttributed setAttributes: @{NSForegroundColorAttributeName: [UIColor redColor]} range:rangeDurationNumber];
         }
+         //----------------------------------------------------
         [displayAttributed appendAttributedString:scoreAttributed];
-        //----------------------------------------------------
     }
     self.display.attributedText = displayAttributed;
 }
