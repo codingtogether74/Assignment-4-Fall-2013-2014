@@ -54,10 +54,10 @@
                                                                                                                    options:NSBackwardsSearch].location-1);
         
         if (result.score == minScore) {
-            [scoreAttributed setAttributes: @{NSForegroundColorAttributeName: [UIColor greenColor]} range:rangeScoreNumber];
+            [scoreAttributed setAttributes: @{NSForegroundColorAttributeName: [UIColor colorWithRed: 0.0 green:0.6 blue:0.1 alpha:1.0]} range:rangeScoreNumber];
         }
         if ((int)roundf(result.duration) == maxDuration) {
-            [scoreAttributed setAttributes: @{NSForegroundColorAttributeName: [UIColor greenColor]} range:rangeDurationNumber];
+            [scoreAttributed setAttributes: @{NSForegroundColorAttributeName: [UIColor colorWithRed: 0.0 green:0.6 blue:0.1 alpha:1.0]} range:rangeDurationNumber];
         }
        
         if (result.score == maxScore) {
