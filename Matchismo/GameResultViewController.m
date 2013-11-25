@@ -46,7 +46,7 @@
                                    [formatter stringFromDate:result.end], round(result.duration)];
         NSMutableAttributedString *scoreAttributed =[[NSMutableAttributedString alloc] initWithString:displayString];
         
-        //--- hightlight max score and min duration -----
+        //--- hightlight max/min score and max/min duration -----
         NSRange rangeScoreNumber = NSMakeRange([displayString rangeOfString:@":"].location+1,
                                                [displayString rangeOfString:@"("].location-[displayString rangeOfString:@":"].location-1);
         NSRange rangeDurationNumber = NSMakeRange([displayString rangeOfString:@"," options:NSBackwardsSearch].location+1,
@@ -54,10 +54,10 @@
                                                                                                                    options:NSBackwardsSearch].location-1);
         
         if (result.score == minScore) {
-            [scoreAttributed setAttributes: @{NSForegroundColorAttributeName: [UIColor colorWithRed: 0.0 green:0.6 blue:0.1 alpha:1.0]} range:rangeScoreNumber];
+            [scoreAttributed setAttributes: @{NSForegroundColorAttributeName: [UIColor colorWithRed: 0.0 green:0.6 blue:0.1 alpha:1.0],NSBackgroundColorAttributeName: [UIColor yellowColor]} range:rangeScoreNumber];
         }
         if ((int)roundf(result.duration) == maxDuration) {
-            [scoreAttributed setAttributes: @{NSForegroundColorAttributeName: [UIColor colorWithRed: 0.0 green:0.6 blue:0.1 alpha:1.0]} range:rangeDurationNumber];
+            [scoreAttributed setAttributes: @{NSForegroundColorAttributeName: [UIColor colorWithRed: 0.0 green:0.6 blue:0.1 alpha:1.0],NSBackgroundColorAttributeName: [UIColor yellowColor]} range:rangeDurationNumber];
         }
        
         if (result.score == maxScore) {

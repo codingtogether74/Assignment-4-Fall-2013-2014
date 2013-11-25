@@ -871,7 +871,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Settings" image="Drawers" id="XLb-Cf-rzn"/>
+                    <tabBarItem key="tabBarItem" title="Settings" image="settings" id="XLb-Cf-rzn"/>
                     <connections>
                         <outlet property="bonusLabel" destination="Bdz-aM-r5I" id="Fbx-ab-Y4H"/>
                         <outlet property="bonusStepper" destination="bUw-9e-nEf" id="hzn-Y6-VL0"/>
@@ -1007,10 +1007,10 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Drawers" width="24" height="24"/>
         <image name="Files" width="22" height="27"/>
         <image name="Games_iOS" width="25" height="25"/>
         <image name="card-back" width="118" height="176"/>
+        <image name="settings" width="30" height="30"/>
         <image name="spade_tab" width="30" height="30"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

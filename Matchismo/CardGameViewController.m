@@ -43,6 +43,13 @@
     return _game;
 }
 
+- (void)setCardButtons:(NSArray *)cardButtons
+{
+    _cardButtons = cardButtons;
+    [self updateUI];
+}
+
+
 - (Deck *)deck
 {
     if (!_deck) _deck = [self createDeck];
@@ -52,13 +59,6 @@
 {
     return nil;
 }
-/*
-- (void)setCardButtons:(NSArray *)cardButtons
-{
-    _cardButtons = cardButtons;
-    [self updateUI];
-}
-*/
 - (NSUInteger)numberOfMatches //abstract
 {
     return 0;
@@ -148,13 +148,13 @@
     } else
         self.resultsLabel.attributedText= [[NSAttributedString alloc] initWithString:@"Play game!"];
 }
-
+/*
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self updateUI];
 }
-
+*/
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:@"Show history"]) {
