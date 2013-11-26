@@ -211,8 +211,8 @@
 			isa = PBXGroup;
 			children = (
 				E4A2D26A18261EEC004D613E /* Card.h */,
-				E4A85AD818327C4B0023F6AD /* SetCard.h */,
 				E4A2D26B18261EEC004D613E /* Card.m */,
+				E4A85AD818327C4B0023F6AD /* SetCard.h */,
 				E4A85AD918327C4B0023F6AD /* SetCard.m */,
 				E4A85ADB18328A270023F6AD /* SetCardDeck.h */,
 				E4A85ADC18328A270023F6AD /* SetCardDeck.m */,
