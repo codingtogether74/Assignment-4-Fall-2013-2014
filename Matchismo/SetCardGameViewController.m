@@ -24,10 +24,11 @@
 {
     return 3;
 }
-- (NSString *)gameName
+- (NSUInteger) startingCardCount
 {
-    return @"Set  Cards";
+    return 12;
 }
+
 -(void)updateCardButton:(UIButton *)cardButton  usingCard:(Card *)card
 {
     if ([card isKindOfClass:[SetCard class]]) {

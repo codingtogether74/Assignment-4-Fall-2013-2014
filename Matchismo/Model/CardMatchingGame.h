@@ -15,6 +15,9 @@
 
 -(void)chooseCardAtIndex:(NSUInteger)index;
 -(Card *)cardAtIndex:(NSUInteger)index;
+- (NSUInteger)cardsInPlay;
+- (NSIndexSet *)getIndexesForMatchedCards:(NSArray *)cards;
+
 
 @property (nonatomic) int matchBonus;
 @property (nonatomic) int mismatchPenalty;

@@ -12,6 +12,7 @@
 @interface CardMatchingGame()
 
 @property (nonatomic,readwrite) NSInteger score;
+@property (strong, nonatomic) Deck *deck;
 @property (nonatomic,strong) NSMutableArray *cards; // of Card
 @property (nonatomic,strong) NSMutableArray *faceUpCards; // of Card
 @property (readwrite,nonatomic) NSInteger lastFlipPoints;
@@ -107,17 +108,36 @@ static const int COST_TO_CHOOSE = 1;
     return (index<[self.cards count]) ? self.cards[index] : nil;
 }
 
+- (NSUInteger)cardsInPlay
+{
+    return [self.cards count];
+}
+
+
+- (NSIndexSet *)getIndexesForMatchedCards:(NSArray *)cards
+{
+    NSMutableIndexSet *indexes =[[NSMutableIndexSet alloc] init];
+    if (cards) {
+        for (Card *card1 in cards) {
+            [indexes addIndex: [self.cards indexOfObject:card1]];
+        }
+        return indexes;
+    }
+    return nil;
+}
+
 -(instancetype)initWithCardCount:(NSUInteger)count
                        usingDeck:(Deck *)deck
              
 {
     self = [super init];
     if (self) {
+        self.deck = deck;
         self.matchBonus = self.gameSettings.bonus;
         self.mismatchPenalty = self.gameSettings.penalty;
         self.flipCost = self.gameSettings.flipCost;
         for (int i= 0; i<count; i++) {
-            Card *card = [deck drawRandomCard];
+            Card *card = [self.deck drawRandomCard];
             if (card) {
                 [self.cards addObject:card];
             } else {

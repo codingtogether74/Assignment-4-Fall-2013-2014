@@ -18,9 +18,13 @@
 // for subclasses
 - (Deck *)createDeck;   //abstract
 - (NSUInteger)numberOfMatches; //abstract
-- (NSString *)gameName; //abstract
 
-- (void)updateCardButton:(UIButton *)cardButton usingCard:(Card *)card;//abstract
+@property (nonatomic) BOOL deleteMatchedCards;
+@property (nonatomic)NSUInteger startingCardCount;  //abstract
+- (UIView *)cellViewForCard:(Card *)card inRect:(CGRect)rect; //abstract
+- (void) updateCell:(UIView *)cell usingCard:(Card *)card animate:(BOOL)animate;
+
+
 - (NSAttributedString *)textForSingleCard:(Card *)card; //abstract
 - (NSAttributedString *)attributedCardsDescription:(NSArray *)cards; //abstract
 @end

@@ -8,6 +8,8 @@
 
 #import "PlayingCardGameViewController.h"
 #import "PlayingCardDeck.h"
+#import "PlayingCard.h"
+#import "PlayingCardView.h"
 
 @interface PlayingCardGameViewController ()
 
@@ -19,19 +21,61 @@
 {
     return [[PlayingCardDeck alloc] init];
 }
+
 - (NSUInteger)numberOfMatches
 {
     return 2;
 }
-- (NSString *)gameName
+
+
+- (NSUInteger) startingCardCount
 {
-    return @"Play Cards";
+    return 20;
 }
 
--(void)updateCardButton:(UIButton *)cardButton usingCard:(Card *)card
+- (UIView *)cellViewForCard:(Card *)card inRect:(CGRect)rect //abstract
 {
-    [cardButton setTitle:[self titleForCard:card] forState:UIControlStateNormal];
-    [cardButton setBackgroundImage:[self backgroundImageForCard:card] forState:UIControlStateNormal];
+    //  PlayingCardView *newPlayingCardView=nil;
+    if ([card isKindOfClass:[PlayingCard class]]) {
+        PlayingCard *playingCard =(PlayingCard *)card;
+        PlayingCardView *newPlayingCardView = [[PlayingCardView alloc]  initWithFrame:rect];
+        newPlayingCardView.opaque = NO;
+        newPlayingCardView.rank=playingCard.rank;
+        newPlayingCardView.suit=playingCard.suit;
+        newPlayingCardView.faceUp=playingCard.isChosen;
+        return newPlayingCardView;
+    }
+    return nil;
+}
+
+- (void) updateCell:(UIView *)cell usingCard:(Card *)card animate:(BOOL)animate
+
+{
+    PlayingCardView *playingCardView = (PlayingCardView *)cell;
+    if ([card isKindOfClass:[PlayingCard class]]) {
+        PlayingCard *playingCard =(PlayingCard *)card;
+        playingCardView.rank = playingCard.rank;
+        playingCardView.suit = playingCard.suit;
+        //           playingCardView.faceUp = playingCard.faceUp;
+        //-------------
+        if (playingCardView.faceUp != playingCard.isChosen) {
+            if (animate) {
+                [UIView transitionWithView:playingCardView
+                                  duration:0.5
+                                   options:UIViewAnimationOptionTransitionFlipFromLeft
+                                animations:^{
+                                    playingCardView.faceUp = playingCard.isChosen;
+                                } completion:NULL];
+            } else {
+                playingCardView.faceUp = playingCard.isChosen;
+            }
+        }
+        
+        //-------------
+        playingCardView.alpha = playingCard.isMatched ? 0.3 : 1.0;
+        
+    }
+    
 }
 
 - (NSAttributedString *)attributedCardsDescription:(NSArray *)cards
@@ -45,13 +89,5 @@
     return [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" %@ flipped %@",card,(card.isChosen) ? @"up!" : @"back!"]];
 }
 
--(UIImage *)backgroundImageForCard:(Card *)card //abstract
-{
-    return [UIImage imageNamed:card.isChosen ? @"cardfront" : @"card-back"];
-}
--(NSString *)titleForCard:(Card *)card //abstract
-{
-    return card.isChosen ? card.contents : @"";
-}
 
 @end
