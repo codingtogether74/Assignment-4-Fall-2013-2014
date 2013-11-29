@@ -22,7 +22,7 @@
 @property (strong,nonatomic) NSMutableArray *cellCenters; //of CGPoints
 @property (strong,nonatomic) NSMutableArray *indexCardsForCardsView; //of NSUIntege
 @property (nonatomic) NSUInteger numberViews;
-
+@property (nonatomic) BOOL didLoad;
 
 
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
@@ -100,19 +100,13 @@
     return _indexCardsForCardsView;
 }
 
-- (BOOL)deleteMatchedCards
-{
-    if(!_deleteMatchedCards) _deleteMatchedCards =YES;
-    return _deleteMatchedCards;
-}
-
 - (Grid *)grid
 {
     if (!_grid)
     {
         _grid =[[Grid alloc] init];
         _grid.size = self.padView.bounds.size;
-        _grid.cellAspectRatio = 60.0/90.0;
+        _grid.cellAspectRatio = 60.0/90.0;    ///?????
         _grid.minimumNumberOfCells = self.numberViews;
         if (!_grid.inputsAreValid) _grid =nil;
         
@@ -161,7 +155,12 @@
     self.game = nil;
     self.flipCount =0;
 
-    [self updateUI];
+    self.grid.minimumNumberOfCells = self.startingCardCount;
+
+    [self reDrawViewsForView:self.padView withHidden:YES];
+    [self performIntroAnimationForView:self.padView];
+
+  //  [self updateUI];
 }
 
 
@@ -173,7 +172,7 @@
         [self.game chooseCardAtIndex:index];
         self.flipCount++;
         [self updateUI];
-      if (self.deleteMatchedCards) {[self deleteCardsFromGrid];}
+        [self deleteCardsFromGrid];
    
 }
 
@@ -246,7 +245,6 @@
     }
 }
 
-
 - (void)animateRemovingDrops:(NSArray *)dropsToRemove
 {
     [UIView animateWithDuration:1.0 animations:^{
@@ -258,24 +256,90 @@
     }
                      completion:^(BOOL finished) {
                          [dropsToRemove makeObjectsPerformSelector:@selector(removeFromSuperview)];
-
                          self.grid.minimumNumberOfCells =[self.cardsView count]-self.numberOfMatches;
-                         if (!_grid.inputsAreValid) _grid =nil;
-                         
-                         self.cardsView =nil;
-                         [self prepareViewsForView:self.padView withHidden:NO] ;
- //                        [self performAfterDeleteAnimationForView:self.padView];
+                         if (self.grid.inputsAreValid)
+                        [self reDrawViewsForView:self.padView withHidden:NO] ;
                      }];
+}
+#define NUMBER_ADD_CARDS 3
+
+- (IBAction)addCards:(id)sender
+{
+    NSMutableArray *cardsViewToInsert = [NSMutableArray array];
+    NSMutableArray *cardsViewPreviuos = [NSMutableArray array];
+
+    [self.game addCards:NUMBER_ADD_CARDS];
+    NSIndexSet *indexes=self.game.indexesOfInsertedCards;
+    self.grid.minimumNumberOfCells =[self.cardsView count]+NUMBER_ADD_CARDS;
+    if (self.grid.inputsAreValid)
+       cardsViewPreviuos = [self takeViewsForView:self.padView withHidden:NO] ;
+    [indexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+        NSUInteger indexView =[self.indexCardsForCardsView indexOfObject:[NSNumber numberWithInteger: idx]];
+        [cardsViewToInsert addObject:self.cardsView[indexView]];
+        [cardsViewPreviuos removeObject:self.cardsView[indexView]];
+           }];
+    [self animateInsertingCards:cardsViewToInsert withPreviousViews:cardsViewPreviuos forView:self.padView];
+
+    //self.flipsLabel.text = [NSString stringWithFormat:@"Cards: %d",[self.game cardsInPlay]]
+}
+
+- (void)animateInsertingCards:(NSArray *)cardsViewToInsert withPreviousViews:(NSArray *)cardsViewPreviuos forView:(UIView *)view
+{
+	CGPoint point = CGPointMake(self.view.bounds.size.width / 2.0f, self.view.bounds.size.height); // * 2.0f);
+    for (UIView *subView in [view subviews])
+    {
+        [subView removeFromSuperview];
+    }
+    for (UIView *v in cardsViewPreviuos) {
+        v.hidden =NO;
+        [view addSubview:v];
+    }
+    for (UIView *v in cardsViewToInsert) {
+        v.hidden =YES;
+        v.center = point;
+        [view addSubview:v];
+    }
+
+    int i=0;
+    for (UIView *v in cardsViewToInsert) {
+        [UIView animateWithDuration:0.65f
+                              delay:0.5f+(i*0.2F)
+                            options:UIViewAnimationOptionCurveEaseOut
+                         animations:^
+         {
+             
+             v.hidden = NO ;
+             int index = [self.cardsView indexOfObject:v];
+             CGPoint center = [self.cellCenters[index] CGPointValue];
+             v.center = center;
+             
+         }
+                         completion:nil];
+        i++;
+    }
+
+}
+
+-(NSMutableArray *)takeViewsForView:(UIView*)view withHidden:(BOOL)hidden
+{
+    NSMutableArray *cardsViewAll = [NSMutableArray array];
+
+    self.cardsView =nil;
+    for (UIView *v in self.cardsView) {
+        v.hidden =hidden;
+        [cardsViewAll addObject:v];
+    }
+    return cardsViewAll;
 }
 
 
--(void)prepareViewsForView:(UIView*)view withHidden:(BOOL)hidden
+-(void)reDrawViewsForView:(UIView*)view withHidden:(BOOL)hidden
 {
     for (UIView *subView in [view subviews])
     {
         [subView removeFromSuperview];
     }
-    
+     self.cardsView =nil;
     for (UIView *v in self.cardsView) {
         v.hidden =hidden;
         [view addSubview:v];
@@ -299,7 +363,6 @@
                         options:UIViewAnimationOptionCurveEaseOut
                      animations:^
      {
- 
              v.hidden = NO ;
              int index = [self.cardsView indexOfObject:v];
              CGPoint center = [self.cellCenters[index] CGPointValue];
@@ -340,22 +403,24 @@
     [super viewDidLayoutSubviews];
    
     self.grid.size = self.padView.bounds.size;
-    self.grid.cellAspectRatio = 60.0/90.0;
+    self.grid.cellAspectRatio = 60.0/90.0;    //?????? magic number
     self.grid.minimumNumberOfCells = self.numberViews;
-    if (!_grid.inputsAreValid) _grid =nil;
-    self.cardsView =nil;
-    [self prepareViewsForView:self.padView withHidden:NO];
-//       [self performAfterDeleteAnimationForView:self.padView];
- //   NSLog(@"Layuot width %f height %f",self.padView.bounds.size.width,self.padView.bounds.size.height);
+    if (!self.grid.inputsAreValid) self.grid =nil;
 
- 
+    [self reDrawViewsForView:self.padView withHidden:NO];
 }
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-//    [self prepareViewsForView:self.padView withHidden:NO];
-
+    if (self.didLoad){
     [self performIntroAnimationForView:self.padView];
-//    NSLog(@"DidAppear width %f height %f",self.padView.bounds.size.width,self.padView.bounds.size.height);
+        self.didLoad =!self.didLoad;
+    }
+}
+
+-(void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.didLoad =YES;
 }
 @end

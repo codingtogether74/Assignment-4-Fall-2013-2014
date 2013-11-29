@@ -17,6 +17,7 @@
 @property (nonatomic,strong) NSMutableArray *faceUpCards; // of Card
 @property (readwrite,nonatomic) NSInteger lastFlipPoints;
 @property (nonatomic,strong) GameSettings *gameSettings;
+@property (readwrite,nonatomic) NSIndexSet *indexesOfInsertedCards;
 
 @end
 
@@ -124,6 +125,27 @@ static const int COST_TO_CHOOSE = 1;
         return indexes;
     }
     return nil;
+}
+- (void)addCards:(NSUInteger)cardsNumber
+{
+    NSMutableIndexSet *indexes =  [[NSMutableIndexSet alloc] init];
+    if (cardsNumber <=[self.deck count]){
+        for (NSUInteger i=0; i<cardsNumber; i++) {
+            Card *card = [self.deck drawRandomCard];
+            [self.cards addObject:card];
+            [indexes addIndex: [self.cards indexOfObject:card]];
+        }
+        self.indexesOfInsertedCards =indexes;
+    } else {
+        self.indexesOfInsertedCards =nil;
+    }
+}
+- (NSIndexSet  *)indexesOfInsertedCards
+{
+    if (!_indexesOfInsertedCards) {
+        _indexesOfInsertedCards = [[NSIndexSet alloc] init];
+    }
+    return _indexesOfInsertedCards ;
 }
 
 -(instancetype)initWithCardCount:(NSUInteger)count

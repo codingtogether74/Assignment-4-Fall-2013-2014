@@ -49,14 +49,12 @@
 }
 
 - (void) updateCell:(UIView *)cell usingCard:(Card *)card animate:(BOOL)animate
-
 {
     PlayingCardView *playingCardView = (PlayingCardView *)cell;
     if ([card isKindOfClass:[PlayingCard class]]) {
         PlayingCard *playingCard =(PlayingCard *)card;
         playingCardView.rank = playingCard.rank;
         playingCardView.suit = playingCard.suit;
-        //           playingCardView.faceUp = playingCard.faceUp;
         //-------------
         if (playingCardView.faceUp != playingCard.isChosen) {
             if (animate) {
@@ -70,12 +68,7 @@
                 playingCardView.faceUp = playingCard.isChosen;
             }
         }
-        
-        //-------------
-        playingCardView.alpha = playingCard.isMatched ? 0.3 : 1.0;
-        
-    }
-    
+     }
 }
 
 - (NSAttributedString *)attributedCardsDescription:(NSArray *)cards

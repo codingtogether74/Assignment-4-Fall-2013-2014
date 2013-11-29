@@ -19,7 +19,6 @@
 - (Deck *)createDeck;   //abstract
 - (NSUInteger)numberOfMatches; //abstract
 
-@property (nonatomic) BOOL deleteMatchedCards;
 @property (nonatomic)NSUInteger startingCardCount;  //abstract
 - (UIView *)cellViewForCard:(Card *)card inRect:(CGRect)rect; //abstract
 - (void) updateCell:(UIView *)cell usingCard:(Card *)card animate:(BOOL)animate;

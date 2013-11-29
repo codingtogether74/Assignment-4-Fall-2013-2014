@@ -17,6 +17,7 @@
 -(Card *)cardAtIndex:(NSUInteger)index;
 - (NSUInteger)cardsInPlay;
 - (NSIndexSet *)getIndexesForMatchedCards:(NSArray *)cards;
+- (void)addCards:(NSUInteger)cardsNumber;
 
 
 @property (nonatomic) int matchBonus;
@@ -28,5 +29,5 @@
 @property (nonatomic,readonly) NSInteger score;
 @property (strong,nonatomic) NSArray *matchedCards;
 @property (readonly,nonatomic) NSInteger lastFlipPoints;
-
+@property (readonly,nonatomic) NSIndexSet *indexesOfInsertedCards;
 @end

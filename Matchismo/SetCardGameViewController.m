@@ -9,6 +9,7 @@
 #import "SetCardGameViewController.h"
 #import "SetCardDeck.h"
 #import "SetCard.h"
+#import "SetCardView.h"
 @interface SetCardGameViewController ()
 
 @end
@@ -29,20 +30,37 @@
     return 12;
 }
 
--(void)updateCardButton:(UIButton *)cardButton  usingCard:(Card *)card
+
+- (UIView *)cellViewForCard:(Card *)card inRect:(CGRect)rect //abstract
 {
     if ([card isKindOfClass:[SetCard class]]) {
-        
-        [cardButton setAttributedTitle:[self cardAttributedContents:(SetCard *)card] forState:UIControlStateNormal];
-        if (card.isChosen) {
-            cardButton.backgroundColor = [UIColor colorWithRed: 0.0 green:0.2 blue:0.5 alpha:0.2];
-        } else {
-            cardButton.backgroundColor = nil;//[UIColor whiteColor];
-        }
-        cardButton.alpha = card.isMatched ? 0.0 : 1.0;
+        SetCard *setCard =(SetCard *)card;
+        SetCardView *newSetCardView = [[SetCardView alloc]  initWithFrame:rect];
+        newSetCardView.opaque = NO;
+        newSetCardView.rank = setCard.number;
+        newSetCardView.symbol = setCard.symbol;
+        newSetCardView.color = setCard.color;
+        newSetCardView.shading = setCard.shading;
+        newSetCardView.faceUp = setCard.isChosen;
+ 
+        return newSetCardView;
     }
+    return nil;
 }
 
+- (void)updateCell:(UIView *)cell usingCard:(Card *)card animate:(BOOL)animate
+{
+        SetCardView *setCardView = (SetCardView *)cell;
+        if ([card isKindOfClass:[SetCard class]]) {
+            SetCard *setCard = (SetCard *)card;
+            setCardView.rank = setCard.number;
+            setCardView.symbol = setCard.symbol;
+            setCardView.color = setCard.color;
+            setCardView.shading = setCard.shading;
+            setCardView.faceUp = setCard.isChosen;
+//            setCardView.alpha = setCard.isUnplayable ? 0.3 : 1.0;
+        }
+}
 - (NSAttributedString *)attributedCardsDescription:(NSArray *)cards
 {
     NSMutableAttributedString *text = [[NSMutableAttributedString alloc] init];
