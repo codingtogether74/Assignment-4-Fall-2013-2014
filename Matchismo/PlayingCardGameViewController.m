@@ -33,6 +33,11 @@
     return 20;
 }
 
+- (BOOL) addCardsAfterDelete
+{
+    return NO;
+}
+
 - (UIView *)cellViewForCard:(Card *)card inRect:(CGRect)rect //abstract
 {
     //  PlayingCardView *newPlayingCardView=nil;
@@ -69,17 +74,6 @@
             }
         }
      }
-}
-
-- (NSAttributedString *)attributedCardsDescription:(NSArray *)cards
-{
-    NSString *text = [cards componentsJoinedByString:@"&"];
-    return [[NSAttributedString alloc] initWithString:text];
-}
-
-- (NSAttributedString *)textForSingleCard:(Card *)card
-{
-    return [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" %@ flipped %@",card,(card.isChosen) ? @"up!" : @"back!"]];
 }
 
 

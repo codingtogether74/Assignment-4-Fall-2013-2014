@@ -29,7 +29,10 @@
 {
     return 12;
 }
-
+- (BOOL) addCardsAfterDelete
+{
+    return YES;
+}
 
 - (UIView *)cellViewForCard:(Card *)card inRect:(CGRect)rect //abstract
 {
@@ -61,61 +64,4 @@
 //            setCardView.alpha = setCard.isUnplayable ? 0.3 : 1.0;
         }
 }
-- (NSAttributedString *)attributedCardsDescription:(NSArray *)cards
-{
-    NSMutableAttributedString *text = [[NSMutableAttributedString alloc] init];
-    NSAttributedString *separator = [[NSAttributedString alloc] init];
-    for (Card *card in cards) {
-        separator = ([cards indexOfObject:card] ==([cards count]-1)) ? [[NSAttributedString alloc] initWithString:@""] :[[NSAttributedString alloc] initWithString:@" & "];
-        [text appendAttributedString:[self cardAttributedContents:(SetCard *)card]];
-        [text appendAttributedString:separator];
-    }
-    return text;
-
-}
-
-- (NSAttributedString *)cardAttributedContents:(SetCard *)card
-{
-    NSDictionary *symbolPallette = @{@"diamond":@"▲",@"squiggle":@"■",@"oval":@"●"};
-    NSDictionary *colorPallette  = @{@"red":[UIColor redColor],@"green":[UIColor greenColor],@"purple":[UIColor purpleColor]};
-    NSDictionary *alphaPallette  = @{@"solid":@0,@"striped":@0.2,@"open":@1};
-    UIColor *cardOutlineColor    = colorPallette[card.color];
-    UIColor *cardColor           = [cardOutlineColor colorWithAlphaComponent:(CGFloat)[alphaPallette[card.shading] floatValue]];
-    NSDictionary *cardAttributes = @{NSForegroundColorAttributeName : cardColor,
-                                         NSStrokeColorAttributeName : cardOutlineColor,
-                                     NSStrokeWidthAttributeName: @-5,
-                                     NSFontAttributeName: [self attributedFont]};
-    NSString *textToDisplay      =  [@"" stringByPaddingToLength:card.number
-                                                 withString:symbolPallette[card.symbol]
-                                            startingAtIndex:0];
-    NSAttributedString *cardContents = [[NSAttributedString alloc] initWithString:textToDisplay
-                                                                       attributes:cardAttributes];
-
-    return cardContents;
-}
-//------ resizable bold font ----
-- (UIFont *)attributedFont
-{
-    UIFont *bodyFont = [[UIFont alloc] init];
-    UIFontDescriptor *fontName = [UIFontDescriptor
-                                     fontDescriptorWithFontAttributes: @{UIFontDescriptorFamilyAttribute: @"Menlo"}];
-    UIFontDescriptor *fontNameBold = [fontName fontDescriptorWithSymbolicTraits:UIFontDescriptorTraitBold];
-    UIFontDescriptor *bodyFontName = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleBody];
-    NSNumber *bodyFontSize = bodyFontName.fontAttributes[UIFontDescriptorSizeAttribute];
-    float bodyFontSizeValue = [bodyFontSize floatValue]+2.0f;
-    bodyFont =
-              [UIFont fontWithDescriptor:fontNameBold size:bodyFontSizeValue];
-    return bodyFont;
-}
-//---------------
-
-- (NSAttributedString *)textForSingleCard:(Card *)card
-{
-    NSMutableAttributedString *text =[[NSMutableAttributedString alloc]
-                                      initWithAttributedString:[self cardAttributedContents:(SetCard *)card]];
-    [text appendAttributedString:[[NSAttributedString alloc]
-                                  initWithString:[NSString stringWithFormat:@"%@",(card.isChosen) ? @" selected!" : @" de-selected!"]]];
-    return text;
-}
-
 @end

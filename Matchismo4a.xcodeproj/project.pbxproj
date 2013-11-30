@@ -35,6 +35,7 @@
 		E4A85AE018328EC80023F6AD /* SetCardGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E4A85ADF18328EC80023F6AD /* SetCardGameViewController.m */; };
 		E4A85AF2183661790023F6AD /* GameSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = E4A85AF1183661790023F6AD /* GameSettings.m */; };
 		E4A85AF518366A660023F6AD /* GameSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E4A85AF418366A660023F6AD /* GameSettingsViewController.m */; };
+		E4DEF45D1849F38B00530719 /* PadView.m in Sources */ = {isa = PBXBuildFile; fileRef = E4DEF45C1849F38B00530719 /* PadView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +96,8 @@
 		E4A85AF1183661790023F6AD /* GameSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameSettings.m; sourceTree = "<group>"; };
 		E4A85AF318366A660023F6AD /* GameSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameSettingsViewController.h; sourceTree = "<group>"; };
 		E4A85AF418366A660023F6AD /* GameSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameSettingsViewController.m; sourceTree = "<group>"; };
+		E4DEF45B1849F38B00530719 /* PadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PadView.h; sourceTree = "<group>"; };
+		E4DEF45C1849F38B00530719 /* PadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PadView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +175,8 @@
 				E4A2D24718261314004D613E /* Main.storyboard */,
 				E4A2D24A18261314004D613E /* CardGameViewController.h */,
 				E4A2D24B18261314004D613E /* CardGameViewController.m */,
+				E4DEF45B1849F38B00530719 /* PadView.h */,
+				E4DEF45C1849F38B00530719 /* PadView.m */,
 				E4A85AD51832772B0023F6AD /* PlayingCardGameViewController.h */,
 				E4A85AD61832772B0023F6AD /* PlayingCardGameViewController.m */,
 				E4A85ADE18328EC80023F6AD /* SetCardGameViewController.h */,
@@ -351,6 +356,7 @@
 				E4A85ADA18327C4B0023F6AD /* SetCard.m in Sources */,
 				E442DE52182BB19D001F463E /* CardMatchingGame.m in Sources */,
 				E4A85AF518366A660023F6AD /* GameSettingsViewController.m in Sources */,
+				E4DEF45D1849F38B00530719 /* PadView.m in Sources */,
 				E49F60D31847116200BE71F8 /* PlayingCardView.m in Sources */,
 				E4A2D27618277CD2004D613E /* PlayingCardDeck.m in Sources */,
 				E4A2D24218261314004D613E /* main.m in Sources */,
