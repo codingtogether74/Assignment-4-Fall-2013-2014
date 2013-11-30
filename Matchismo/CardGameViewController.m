@@ -157,13 +157,15 @@
 - (IBAction)flipCard:(UITapGestureRecognizer *)gesture
 {
     if (!self.padView.pinchedViews) {
-    CGPoint tapLocation =[gesture locationInView:self.padView];
-    NSUInteger indexView = [self indexForItemInViewArray:self.cardsView atPoint:tapLocation];
-    NSUInteger index =[self.indexCardsForCardsView[indexView] unsignedIntegerValue];
-        [self.game chooseCardAtIndex:index];
-        self.flipCount++;
-        [self updateUI];
-        [self deleteCardsFromGrid];
+        CGPoint tapLocation =[gesture locationInView:self.padView];
+        NSUInteger indexView = [self indexForItemInViewArray:self.cardsView atPoint:tapLocation];
+        if (indexView<[self.cardsView count]) {
+            NSUInteger index =[self.indexCardsForCardsView[indexView] unsignedIntegerValue];
+            [self.game chooseCardAtIndex:index];
+            self.flipCount++;
+            [self updateUI];
+            [self deleteCardsFromGrid];
+        }
     } else {
         [self restoreAfterPichAnimationForView:self.padView];
         self.padView.pinchedViews =NO;
@@ -240,18 +242,21 @@
     NSMutableArray *cardsViewPreviuos = [NSMutableArray array];
     
     [self.game addCards:NUMBER_ADD_CARDS];
-    NSIndexSet *indexes=self.game.indexesOfInsertedCards;
-    self.grid.minimumNumberOfCells =[self.cardsView count]+NUMBER_ADD_CARDS;
-    if (self.grid.inputsAreValid)
-        cardsViewPreviuos = [self takeViewsForView:self.padView withHidden:NO] ;
-    [indexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
-        NSUInteger indexView =[self.indexCardsForCardsView indexOfObject:[NSNumber numberWithInteger: idx]];
-        [cardsViewToInsert addObject:self.cardsView[indexView]];
-        [cardsViewPreviuos removeObject:self.cardsView[indexView]];
-    }];
-    [self animateInsertingCards:cardsViewToInsert withPreviousViews:cardsViewPreviuos forView:self.padView];
+    
+    if ([self.game.indexesOfInsertedCards count] == NUMBER_ADD_CARDS) {
+        NSIndexSet *indexes=self.game.indexesOfInsertedCards;
+        self.grid.minimumNumberOfCells =[self.cardsView count]+NUMBER_ADD_CARDS;
+        if (self.grid.inputsAreValid)
+            cardsViewPreviuos = [self takeViewsForView:self.padView withHidden:NO] ;
+            [indexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+                NSUInteger indexView =[self.indexCardsForCardsView indexOfObject:[NSNumber numberWithInteger: idx]];
+                [cardsViewToInsert addObject:self.cardsView[indexView]];
+                [cardsViewPreviuos removeObject:self.cardsView[indexView]];
+           }];
+        [self animateInsertingCards:cardsViewToInsert withPreviousViews:cardsViewPreviuos forView:self.padView];
         [self updateUI];
- }
+    }
+}
 
 - (void)animateInsertingCards:(NSArray *)cardsViewToInsert
             withPreviousViews:(NSArray *)cardsViewPreviuos
