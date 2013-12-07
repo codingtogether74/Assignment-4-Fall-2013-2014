@@ -40,11 +40,17 @@
         SetCard *setCard =(SetCard *)card;
         SetCardView *newSetCardView = [[SetCardView alloc]  initWithFrame:rect];
         newSetCardView.opaque = NO;
+//        newSetCardView.number = setCard.number;
+        
         newSetCardView.rank = setCard.number;
         newSetCardView.symbol = setCard.symbol;
         newSetCardView.color = setCard.color;
         newSetCardView.shading = setCard.shading;
+//        newSetCardView.chosen = setCard.isChosen;
         newSetCardView.faceUp = setCard.isChosen;
+
+        //------
+        
  
         return newSetCardView;
     }
@@ -56,12 +62,30 @@
         SetCardView *setCardView = (SetCardView *)cell;
         if ([card isKindOfClass:[SetCard class]]) {
             SetCard *setCard = (SetCard *)card;
-            setCardView.rank = setCard.number;
+//            setCardView.number = setCard.number;
+             setCardView.rank = setCard.number;
             setCardView.symbol = setCard.symbol;
             setCardView.color = setCard.color;
             setCardView.shading = setCard.shading;
-            setCardView.faceUp = setCard.isChosen;
-//            setCardView.alpha = setCard.isUnplayable ? 0.3 : 1.0;
+//            setCardView.faceUp = setCard.isChosen;
+            //-------------
+            if (setCardView.faceUp != setCard.isChosen) {
+//           if (setCardView.chosen != setCard.isChosen) {
+                if (animate) {
+                    [UIView transitionWithView:setCardView
+                                      duration:0.5
+                                       options:UIViewAnimationOptionTransitionFlipFromLeft
+                                    animations:^{
+                                        setCardView.faceUp = setCard.isChosen;
+
+                                       // setCardView.chosen = setCard.isChosen;
+                                    } completion:NULL];
+                } else {
+//                    setCardView.chosen = setCard.isChosen;
+
+                    setCardView.faceUp = setCard.isChosen;
+                }
+            }
         }
 }
 @end

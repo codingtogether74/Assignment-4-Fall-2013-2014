@@ -29,6 +29,49 @@
     return _cards;
 }
 
+-(NSArray *)cardsOnTable
+{
+   NSMutableArray *remCards =[[NSMutableArray alloc] init];
+    for (Card *card in self.cards) {
+        if (!card.isMatched) {
+            [remCards addObject:card];
+        }
+    }
+    return [remCards copy];
+}
+
+-(NSMutableArray *)matchesInRemainingCards
+{
+    NSMutableArray *matches =[[NSMutableArray alloc] init];
+    NSMutableArray *checkCards =[[NSMutableArray alloc] init];
+    if (self.numberOfMatches ==3)
+    {
+        NSUInteger nCards = [self.cardsOnTable count];
+        for (int i=0; i<nCards; i++) {
+            Card *card1 =self.cardsOnTable[i];
+            [checkCards addObject:card1];
+            for (int j=i+1; j<nCards; j++) {
+                Card *card2 =self.cardsOnTable[j];
+                 [checkCards addObject:card2];
+                for (int k=j+1; k<nCards; k++) {
+                    Card *card3 =self.cardsOnTable[k];
+                    [checkCards addObject:card3];
+                    int matchScore =[card3 match:checkCards];
+                    if (matchScore>0) {
+                        [matches addObject:[checkCards copy]];
+                    }
+                     [checkCards removeObject:card3];
+                }
+                [checkCards removeObject:card2];
+            }
+            [checkCards removeObject:card1];
+        }
+       return matches;
+    }
+    
+    return nil;
+}
+
 - (int) matchBonus
 {
     if (_matchBonus<= 0) _matchBonus = MATCH_BONUS;

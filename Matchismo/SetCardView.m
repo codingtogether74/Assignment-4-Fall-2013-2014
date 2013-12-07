@@ -17,7 +17,7 @@
     [roundedRect addClip]; //prevents filling corners, i.e. sharp corners not included in roundedRect
     
     if (self.faceUp) {
-        [[UIColor colorWithRed: 0.0 green:0.2 blue:0.2 alpha:0.1] setFill];
+        [[UIColor lightGrayColor] setFill];
         UIRectFill(self.bounds);
     } else {
         [[UIColor whiteColor] setFill];
@@ -163,12 +163,7 @@
 {
     NSDictionary *colorPallette  = @{@"red":[UIColor redColor],@"green":[UIColor greenColor],@"purple":[UIColor purpleColor]};
     UIColor *cardColor    = colorPallette[self.color];
-/*
-    //----------------------------------------
-    NSArray *colorPallette = @[[UIColor redColor],[UIColor colorWithRed: 0.0 green:0.8 blue:0.0 alpha:1.0],[UIColor purpleColor]];
-    UIColor *cardColor = colorPallette[self.color-1];
-    //-----------------------------------------
- */
+
     [cardColor setStroke];
     if ([self.shading isEqualToString:@"solid"] || [self.shading isEqualToString:@"striped"])[cardColor setFill];
     if (self.rank == 2) {
@@ -277,6 +272,10 @@ static void drawStripes (void *info, CGContextRef context) {
 - (void)setup
 {
     // do initializaion here
+    self.backgroundColor = nil;
+    self.opaque = NO;
+    self.contentMode = UIViewContentModeRedraw;
+
 }
 
 - (void)awakeFromNib

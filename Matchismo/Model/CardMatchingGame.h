@@ -30,4 +30,7 @@
 @property (strong,nonatomic) NSArray *matchedCards;
 @property (readonly,nonatomic) NSInteger lastFlipPoints;
 @property (readonly,nonatomic) NSIndexSet *indexesOfInsertedCards;
+@property (nonatomic,strong) NSArray *cardsOnTable; // of Card not matched
+
+@property (strong,nonatomic) NSMutableArray *matchesInRemainingCards;
 @end

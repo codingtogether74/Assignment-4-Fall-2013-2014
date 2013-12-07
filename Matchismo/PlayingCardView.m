@@ -197,6 +197,10 @@
 - (void)setup
 {
     // do initializaion here
+//    self.backgroundColor = nil;
+//    self.opaque = NO;
+//    self.contentMode = UIViewContentModeRedraw;
+
 }
 
 - (void)awakeFromNib
